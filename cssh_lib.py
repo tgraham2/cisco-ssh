@@ -6,25 +6,33 @@ def qp():
   from getpass import getpass
   #
   u=raw_input('user:')
-  c=encrypt(os.environ['computername'],getpass('pw:'))
+  try:
+    hashkey = os.environ['computername']
+  except:
+    hashkey = os.environ['HOSTNAME']
+  c=encrypt(hashkey,getpass('pw:'))
   f=open('c:\Python27\\'+u+'.cod','w')
   f.write(c)
   f.close()
   #
-  if decrypt(os.environ['computername'],c)==getpass('again:'):
-	  print 'ok'
+  if decrypt(hashkey,c)==getpass('again:'):
+	  print ('ok')
   else:
 	  f.erase()
-	  print 'try again'
+	  print ('try again')
   f=open('c:\Python27\\'+u+'.cod','r')
   c2=f.read()
-  print f,c2
+  #print( f,c2) # don't do this in Linux
   f.close()
 # cisco ssh interface
 def csshpw(username='tgraham'):
   from simplecrypt import encrypt,decrypt
   import os
   import sys
+  try:
+    hashkey = os.environ['computername']
+  except:
+    hashkey = os.environ['HOSTNAME']
   try:
       fp=open('c:\Python27\\'+username+'.cod','r')
   except:
@@ -33,7 +41,7 @@ def csshpw(username='tgraham'):
   else:
       cry=fp.read()
       fp.close()
-      return(decrypt(os.environ['computername'],cry))
+      return(decrypt(hashkey,cry))
 #
 class cssh(object):
   #
